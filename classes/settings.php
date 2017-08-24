@@ -7,5 +7,3 @@ class Settings {
         $this->production = false;
     }
 }
-
-?>

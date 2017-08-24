@@ -9,8 +9,7 @@ class Cards {
 
     public function __construct ($settings) {
         $this->settings = $settings;
-        $this->DBcards = file_get_contents( "http://{$_SERVER['SERVER_NAME']}/REST/v1/jsdb/cards.json");
-        // $this->DBcards = file_get_contents("http://localhost/ExcelInt/web/REST/v1/jsdb/cards.json");
+        $this->DBcards = file_get_contents( "http://{$_SERVER['SERVER_NAME']}/REST/v1/jsondb/cards.json");
         $this->DBcards = json_decode($this->DBcards, true);
     }
     public function getCards () {

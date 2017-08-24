@@ -32,3 +32,6 @@ class RestAPI {
 }
 
 ?>
+<div>REST API</div>
+<span> + </span><span>v1 - Первая версия rest сервиса</span><br />
+<span> - - </span><span class="dir">/cards</span><span> - Возвращает краткую информацию по доступным карточкам</span>
