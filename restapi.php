@@ -1,7 +1,6 @@
 <?php
 
-include('classes/settings.php');
-include('classes/cards.php');
+include('classes/index.php');
 
 header("Access-Control-Allow-Origin: *");
 
@@ -23,7 +22,7 @@ class RestAPI {
                 break;
             
             default:
-                $this->answer = "ERROR: There is no such rout";
+                $this->answer = "ERROR: There is no such rout - {$this->rout}";
                 break;
         }
     }
