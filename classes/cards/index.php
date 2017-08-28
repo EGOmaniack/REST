@@ -35,4 +35,17 @@ class Cards {
         $this->jsonCards = json_encode( $this->cards, JSON_UNESCAPED_UNICODE );
         return $this->jsonCards;
     }
+    public function getFullInfo($flowName) {
+        
+        foreach ($this->DBcards as $card) {
+            if($card['flowName'] == $flowName){
+
+                header("Access-Control-Allow-Origin: *");
+                return json_encode( $card, JSON_UNESCAPED_UNICODE );
+            }
+        }
+            header("HTTP/1.0 406 Not Acceptable");
+            die('Параметр flowName не найден');
+    }
 }
+
