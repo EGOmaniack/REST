@@ -23,8 +23,8 @@ class Cards {
                 $this->newCard['subTitle'] = $card['subTitle'];
                 $this->newCard['inDeveloping'] = $card['inDeveloping'];
                 $this->newCard['canIUse'] = $card['canIUse'];
-                $this->newCard['shortDiscription'] = $card['shortDiscription'];
-                $this->newCard['flowName'] = $card['flowName'];
+                $this->newCard['shortDescription'] = $card['shortDescription'];
+                $this->newCard['wayname'] = $card['wayName'];
         
                 $this->cards[] = $this->newCard;
                 unset($this->newCard);
@@ -32,20 +32,20 @@ class Cards {
         };
 
         
-        $this->jsonCards = json_encode( $this->cards, JSON_UNESCAPED_UNICODE );
-        return $this->jsonCards;
+//        $this->jsonCards = json_encode( $this->cards, JSON_UNESCAPED_UNICODE );
+        return $this->cards;
     }
-    public function getFullInfo($flowName) {
+    public function getFullInfo($wayName) {
         
         foreach ($this->DBcards as $card) {
-            if($card['flowName'] == $flowName){
+            if($card['wayName'] == $wayName){
 
                 header("Access-Control-Allow-Origin: *");
-                return json_encode( $card, JSON_UNESCAPED_UNICODE );
+                return $card;
             }
         }
             header("HTTP/1.0 406 Not Acceptable");
-            die('Параметр flowName не найден');
+            die('Параметр wayName не найден');
     }
 }
 

@@ -5,9 +5,9 @@
         "pic": "calc_1.jpg",
         "inDeveloping": true,
         "canIUse": true,
-        "shortDiscription": "Наш первый сервис позволяет объединять одинаковые материалы из ведомости материалов с учетом количества агрегатов.",
-        "flowName": "ExcelInt",
-        "discription": {
+        "shortDescription": "Наш первый сервис позволяет объединять одинаковые материалы из ведомости материалов с учетом количества агрегатов.",
+        "wayName": "ExcelInt",
+        "description": {
             "text" : "Это наш первый сервис, позволяющий объединять одинаковые материалы из ГОТОВЫХ ведомостей материалов, с учетом количества агрегатов. Файл принимается как минимум в формате Excel 2007г - \"xlsx\" Если планируется посчитать несколко агрегатов или др. инж. едениц, то внутри файла, агрегаты должны быть указаны, как показано в примере В колонке \"А\" ставится английское \"n\". В колонке \"B\" название агрегата. В колонке \"С\" количество агрегатов Все в одну строку. Если у вас один агрегат его указывать необязательно. Номер листа с материалами должен быть 4ым. Название листа не имеет значения. Стили оформления не имеют значения"
         },
         "long_pic": "ExcelInt_long.jpg"
@@ -18,9 +18,9 @@
         "pic": "none",
         "inDeveloping": true,
         "canIUse": true,
-        "shortDiscription": "Данный сирвис позволяет сгенерировать заготовку под маршрутку из данных о проекте собранный программой PRscanner",
-        "flowName": "NewSpecParcerFlow",
-        "discription": {
+        "shortDescription": "Данный сирвис позволяет сгенерировать заготовку под маршрутку из данных о проекте собранный программой PRscanner",
+        "wayName": "SpecParcer",
+        "description": {
             "text" : "Для начала проект необходимо просканировать программой PRScanner. А поученный результат выбрать в поле \"Выберите файлы\". Затем в поле Шифр корневой сбоки необходимо вписать шифр корневой сборочной единицы. прим. \"ПЗЛ 0.0000.00\""
         },
         "long_pic": "none"
@@ -31,9 +31,9 @@
         "pic": "none",
         "inDeveloping": true,
         "canIUse": false,
-        "shortDiscription": "Сервис по учету работ и сотрудников, проводивших работы, при ремонте платформ. Так же сервис позволяет получить паспорт ремонта, включающий документацию по всем выполненным работам",
-        "flowName": "PlatformDocs",
-        "discription": ""
+        "shortDescription": "Сервис по учету работ и сотрудников, проводивших работы, при ремонте платформ. Так же сервис позволяет получить паспорт ремонта, включающий документацию по всем выполненным работам",
+        "wayName": "PlatformDocs",
+        "description": ""
     },
     {
         "title": "Каталогизатор",
@@ -41,18 +41,8 @@
         "pic": "okbL.jpg",
         "inDeveloping": true,
         "canIUse": false,
-        "shortDiscription": "Учет документации. Кому когда выдано или где лежит. И просто полезные ссылки",
-        "flowName": "Catalogithator",
-        "discription": ""
-    },
-    {
-        "title": "Тестовая карточка",
-        "subTitle": "Эта карточка просто для теста",
-        "pic": "none",
-        "inDeveloping": false,
-        "canIUse": true,
-        "shortDiscription": "Эта карточка не делает ничего :)",
-        "flowName": "TestFlow",
-        "discription": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quis ullam earum tempore. Ipsum placeat totam minima error nesciunt odio, nam officiis. Pariatur dicta, facilis vitae tempore numquam enim veritatis dolores. Dolor quas distinctio quos mollitia nemo ab soluta voluptatum. Quis suscipit quia perspiciatis at quasi natus cupiditate adipisci earum id obcaecati aut consectetur, nesciunt quam sunt, corrupti cum sed, modi. Doloremque earum, numquam fugit consectetur. Soluta nisi temporibus libero quod, delectus repellat quidem exercitationem, cum, recusandae deleniti, voluptatum odit eius totam rerum quibusdam accusamus quis perferendis vel! Unde, accusantium ea."
+        "shortDescription": "Учет документации. Кому когда выдано или где лежит. И просто полезные ссылки",
+        "wayName": "Catalogithator",
+        "description": ""
     }
 ]
