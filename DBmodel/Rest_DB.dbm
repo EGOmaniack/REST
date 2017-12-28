@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.0-alpha1" last-position="0,0" last-zoom="1"
+	 default-schema="public" default-owner="postgres">
+<database name="new_database">
+</database>
+
+<schema name="public" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<schema name="rest" rect-visible="true" fill-color="#94e1e5">
+</schema>
+
+<table name="ways">
+	<schema name="rest"/>
+	<role name="postgres"/>
+	<position x="595" y="849"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="way_name" not-null="true">
+		<type name="text" length="0"/>
+		<comment><![CDATA[имя пути]]></comment>
+	</column>
+	<column name="description">
+		<type name="text" length="0"/>
+	</column>
+	<constraint name="ways_pk" type="pk-constr" table="rest.ways">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="ways_uq" type="uq-constr" table="rest.ways">
+		<columns names="way_name" ref-type="src-columns"/>
+	</constraint>
+	<initial-data>
+<![CDATA[id•way_name•description⸣
+•StartPage•Стартовая страница⸣
+•ExcelInt•Помощьв в калькуляциях⸣
+•SpecParcer•Работа с проектом для создания маршруток и др⸣
+•Identification•Профиль, регистрация и тд]]>
+	</initial-data>
+</table>
+
+<schema name="access" rect-visible="true" fill-color="#abb258">
+	<role name="postgres"/>
+</schema>
+
+<table name="accesses">
+	<schema name="access"/>
+	<role name="postgres"/>
+	<position x="597" y="956"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="way_id">
+		<type name="int4" length="0"/>
+	</column>
+	<column name="user_id" not-null="true">
+		<type name="int4" length="0"/>
+	</column>
+	<column name="access_lvl_id" not-null="true">
+		<type name="int4" length="0"/>
+	</column>
+	<constraint name="accesses_pk" type="pk-constr" table="access.accesses">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<schema name="users" rect-visible="true" fill-color="#5aa578">
+	<role name="postgres"/>
+</schema>
+
+<table name="users">
+	<schema name="users"/>
+	<role name="postgres"/>
+	<position x="830" y="859"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="name" not-null="true" default-value="'unknown'">
+		<type name="text" length="0"/>
+	</column>
+	<column name="surname" not-null="true" default-value="'unknown'">
+		<type name="text" length="0"/>
+	</column>
+	<column name="birthday">
+		<type name="date" length="0"/>
+	</column>
+	<constraint name="user_pk" type="pk-constr" table="users.users">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="accesses_lvls">
+	<schema name="access"/>
+	<role name="postgres"/>
+	<position x="632" y="1063"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="lvl_code" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<column name="description">
+		<type name="text" length="0"/>
+	</column>
+	<constraint name="accesses_lvls_pk" type="pk-constr" table="access.accesses_lvls">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<initial-data>
+<![CDATA[id•lvl_code•description⸣
+•admin•admin⸣
+•boss•начальник⸣
+•regular•обычный уровень доступа ( допущен )⸣
+•guest•уровень доступа как у гостя без регистрации⸣
+•no_access•нет доступа]]>
+	</initial-data>
+</table>
+
+<table name="passwords">
+	<schema name="users"/>
+	<role name="postgres"/>
+	<position x="1030" y="857"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="user_id" not-null="true">
+		<type name="int4" length="0"/>
+	</column>
+	<column name="login" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<column name="pass" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<constraint name="passwords_pk" type="pk-constr" table="users.passwords">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="new_user_request">
+	<schema name="users"/>
+	<role name="postgres"/>
+	<position x="1036" y="981"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="name" default-value="'unknown'">
+		<type name="text" length="0"/>
+	</column>
+	<column name="surname" default-value="'unknown'">
+		<type name="text" length="0"/>
+	</column>
+	<column name="login" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<column name="pass" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<column name="status" not-null="true" default-value="0">
+		<type name="smallint" length="0"/>
+		<comment><![CDATA[статус запроса 0 - не рассмотренно 1 - принято 2 - отвергнуто]]></comment>
+	</column>
+	<constraint name="new_user_request_pk" type="pk-constr" table="users.new_user_request">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<constraint name="accesses_fk_ways" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="rest.ways" table="access.accesses">
+	<columns names="way_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="accesses_fk_user" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="users.users" table="access.accesses">
+	<columns names="user_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="accesses_fk_lvl" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="access.accesses_lvls" table="access.accesses">
+	<columns names="access_lvl_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="passwords_fk_user" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="users.users" table="users.passwords">
+	<columns names="user_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_accesses_ways" type="relfk"
+	 src-table="access.accesses"
+	 dst-table="rest.ways"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-59.0243" y="-2.94853"/>
+	</label>
+</relationship>
+
+<relationship name="rel_accesses_users" type="relfk"
+	 src-table="access.accesses"
+	 dst-table="users.users"
+	 src-required="false" dst-required="false">
+	<label ref-type="src-label">
+		<position x="6.54" y="-1.2"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="56.8757" y="0.551472"/>
+	</label>
+</relationship>
+
+<relationship name="rel_accesses_accesses_lvls" type="relfk"
+	 src-table="access.accesses"
+	 dst-table="access.accesses_lvls"
+	 src-required="false" dst-required="false">
+	<label ref-type="src-label">
+		<position x="8.54" y="7.3"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="86.7757" y="-3.94853"/>
+	</label>
+</relationship>
+
+<relationship name="rel_passwords_users" type="relfk"
+	 src-table="users.passwords"
+	 dst-table="users.users"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-3.62426" y="-71.4485"/>
+	</label>
+</relationship>
+
+</dbmodel>

@@ -1,4 +1,5 @@
 <?php
+session_start();
 include '../../../classes/index.php';
 
 header("Access-Control-Allow-Origin: *");

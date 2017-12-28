@@ -1,4 +1,5 @@
 <?php
+session_start();
 if(isset($_GET['flowName'])){
 
     include_once('../../index.php');
