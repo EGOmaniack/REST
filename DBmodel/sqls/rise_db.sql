@@ -79,8 +79,8 @@ ALTER TABLE access.accesses OWNER TO postgres;
 -- DROP TABLE IF EXISTS users.users CASCADE;
 CREATE TABLE users.users(
 	id serial NOT NULL,
-	name text DEFAULT 'unknown',
-	surname text DEFAULT 'unknown',
+	name text NOT NULL DEFAULT 'unknown',
+	surname text NOT NULL DEFAULT 'unknown',
 	birthday date,
 	CONSTRAINT user_pk PRIMARY KEY (id)
 
@@ -136,6 +136,8 @@ CREATE TABLE users.new_user_request(
 	login text NOT NULL,
 	pass text NOT NULL,
 	status smallint NOT NULL DEFAULT 0,
+	user_ip text,
+	date date DEFAULT now(),
 	CONSTRAINT new_user_request_pk PRIMARY KEY (id)
 
 );

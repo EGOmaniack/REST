@@ -163,6 +163,12 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="smallint" length="0"/>
 		<comment><![CDATA[статус запроса 0 - не рассмотренно 1 - принято 2 - отвергнуто]]></comment>
 	</column>
+	<column name="user_ip">
+		<type name="text" length="0"/>
+	</column>
+	<column name="date" default-value="now()">
+		<type name="date" length="0"/>
+	</column>
 	<constraint name="new_user_request_pk" type="pk-constr" table="users.new_user_request">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>

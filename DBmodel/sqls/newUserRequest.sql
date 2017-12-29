@@ -1,6 +1,6 @@
 -- функция создания запроса нового пользователя
-drop function if exists newUserRequest (name text, surname text, login text, pass text);
-CREATE or replace FUNCTION newUserRequest (name text, surname text, login text , pass text)
+drop function if exists newUserRequest (name text, surname text, login text, pass text, ip text);
+CREATE or replace FUNCTION newUserRequest (name text, surname text, login text , pass text, ip text)
 --	$1 имя пользователя
 --	$2 Фамилия пользователя
 --	$3 login пользователя обязательно
@@ -20,8 +20,8 @@ begin
 					select id into login_id from users.passwords where users.passwords.login = $3;
 					if not found then
 				
-						insert into users.new_user_request (id, "name", surname, login, pass, status)
-						values (default, $1, $2, $3, $4, default);
+						insert into users.new_user_request (id, "name", surname, login, pass, status, user_ip, "date")
+						values (default, $1, $2, $3, $4, default, $5, default);
 						
 						return true;
 					else
