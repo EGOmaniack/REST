@@ -10,6 +10,7 @@ or die('Could not connect: ' . pg_last_error());
 $sqlstr = "select * from newUserRequest( '"
     . $data->name . "', '"
     . $data->sName . "', '"
+    . $data->patronymic . "', '"
     . $data->login . "', '"
     . hash('sha256', $data->pass) . "', '"
     . $_SERVER['REMOTE_ADDR'] . "');";

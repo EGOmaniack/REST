@@ -82,7 +82,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="name" not-null="true" default-value="'unknown'">
 		<type name="text" length="0"/>
 	</column>
-	<column name="surname" not-null="true" default-value="'unknown'">
+	<column name="surname">
+		<type name="text" length="0"/>
+	</column>
+	<column name="patronymic">
 		<type name="text" length="0"/>
 	</column>
 	<column name="birthday">
@@ -91,6 +94,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="user_pk" type="pk-constr" table="users.users">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
+	<initial-data>
+<![CDATA[id•name•surname•patronymic•birthday⸣
+1•root•root•root•]]>
+	</initial-data>
 </table>
 
 <table name="accesses_lvls">
@@ -138,6 +145,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="passwords_pk" type="pk-constr" table="users.passwords">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
+	<initial-data>
+<![CDATA[id•user_id•login•pass⸣
+•1•root•cef9be2622851fe89ad9a686e3e38b8b9c6fc1a371a1a84cb09c52de7669c8b6]]>
+	</initial-data>
 </table>
 
 <table name="new_user_request">
@@ -151,6 +162,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="text" length="0"/>
 	</column>
 	<column name="surname" default-value="'unknown'">
+		<type name="text" length="0"/>
+	</column>
+	<column name="patronymic">
 		<type name="text" length="0"/>
 	</column>
 	<column name="login" not-null="true">
@@ -170,6 +184,27 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="date" length="0"/>
 	</column>
 	<constraint name="new_user_request_pk" type="pk-constr" table="users.new_user_request">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="connections">
+	<schema name="users"/>
+	<role name="postgres"/>
+	<position x="829.333" y="744"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="user_id" not-null="true">
+		<type name="int4" length="0"/>
+	</column>
+	<column name="token" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<column name="made" not-null="true" default-value="now()">
+		<type name="date" length="0"/>
+	</column>
+	<constraint name="con_pk" type="pk-constr" table="users.connections">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
@@ -194,6 +229,12 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <constraint name="passwords_fk_user" type="fk-constr" comparison-type="MATCH FULL"
 	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="users.users" table="users.passwords">
+	<columns names="user_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="con_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="users.users" table="users.connections">
 	<columns names="user_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
@@ -239,5 +280,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<position x="-3.62426" y="-71.4485"/>
 	</label>
 </relationship>
+
+<relationship name="rel_connections_users" type="relfk"
+	 src-table="users.connections"
+	 dst-table="users.users"
+	 src-required="false" dst-required="false"/>
 
 </dbmodel>

@@ -80,13 +80,17 @@ ALTER TABLE access.accesses OWNER TO postgres;
 CREATE TABLE users.users(
 	id serial NOT NULL,
 	name text NOT NULL DEFAULT 'unknown',
-	surname text NOT NULL DEFAULT 'unknown',
+	surname text,
+	patronymic text,
 	birthday date,
 	CONSTRAINT user_pk PRIMARY KEY (id)
 
 );
 -- ddl-end --
 ALTER TABLE users.users OWNER TO postgres;
+-- ddl-end --
+
+INSERT INTO users.users (id, name, surname, patronymic, birthday) VALUES (DEFAULT, E'root', E'root', E'root', DEFAULT);
 -- ddl-end --
 
 -- object: access.accesses_lvls | type: TABLE --
@@ -127,12 +131,16 @@ CREATE TABLE users.passwords(
 ALTER TABLE users.passwords OWNER TO postgres;
 -- ddl-end --
 
+INSERT INTO users.passwords (id, user_id, login, pass) VALUES (DEFAULT, E'1', E'root', E'cef9be2622851fe89ad9a686e3e38b8b9c6fc1a371a1a84cb09c52de7669c8b6');
+-- ddl-end --
+
 -- object: users.new_user_request | type: TABLE --
 -- DROP TABLE IF EXISTS users.new_user_request CASCADE;
 CREATE TABLE users.new_user_request(
 	id serial NOT NULL,
 	name text DEFAULT 'unknown',
 	surname text DEFAULT 'unknown',
+	patronymic text,
 	login text NOT NULL,
 	pass text NOT NULL,
 	status smallint NOT NULL DEFAULT 0,
@@ -145,6 +153,20 @@ CREATE TABLE users.new_user_request(
 COMMENT ON COLUMN users.new_user_request.status IS 'статус запроса 0 - не рассмотренно 1 - принято 2 - отвергнуто';
 -- ddl-end --
 ALTER TABLE users.new_user_request OWNER TO postgres;
+-- ddl-end --
+
+-- object: users.connections | type: TABLE --
+-- DROP TABLE IF EXISTS users.connections CASCADE;
+CREATE TABLE users.connections(
+	id serial NOT NULL,
+	user_id int4 NOT NULL,
+	token text NOT NULL,
+	made date NOT NULL DEFAULT now(),
+	CONSTRAINT con_pk PRIMARY KEY (id)
+
+);
+-- ddl-end --
+ALTER TABLE users.connections OWNER TO postgres;
 -- ddl-end --
 
 -- object: accesses_fk_ways | type: CONSTRAINT --
@@ -171,6 +193,13 @@ ON DELETE NO ACTION ON UPDATE NO ACTION;
 -- object: passwords_fk_user | type: CONSTRAINT --
 -- ALTER TABLE users.passwords DROP CONSTRAINT IF EXISTS passwords_fk_user CASCADE;
 ALTER TABLE users.passwords ADD CONSTRAINT passwords_fk_user FOREIGN KEY (user_id)
+REFERENCES users.users (id) MATCH FULL
+ON DELETE NO ACTION ON UPDATE NO ACTION;
+-- ddl-end --
+
+-- object: con_fk | type: CONSTRAINT --
+-- ALTER TABLE users.connections DROP CONSTRAINT IF EXISTS con_fk CASCADE;
+ALTER TABLE users.connections ADD CONSTRAINT con_fk FOREIGN KEY (user_id)
 REFERENCES users.users (id) MATCH FULL
 ON DELETE NO ACTION ON UPDATE NO ACTION;
 -- ddl-end --
