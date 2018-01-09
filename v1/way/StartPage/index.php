@@ -6,7 +6,7 @@ header("Access-Control-Allow-Origin: *");
 http_response_code (200);
 $way = new Way("StartPage", "Start", "Cards");
 $cards = new Cards(new Settings());
-$initData = $cards -> getCards();
+$initData['packs'] = $cards -> getCards();
 
 $Answer = new GetWayAnswer($way, $initData);
 

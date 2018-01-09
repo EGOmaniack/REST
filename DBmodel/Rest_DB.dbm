@@ -148,6 +148,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="passwords_pk" type="pk-constr" table="users.passwords">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
+	<constraint name="passwords_uq" type="uq-constr" table="users.passwords">
+		<columns names="login" ref-type="src-columns"/>
+	</constraint>
 	<initial-data>
 <![CDATA[id•user_id•login•pass⸣
 •1•root•cef9be2622851fe89ad9a686e3e38b8b9c6fc1a371a1a84cb09c52de7669c8b6]]>
