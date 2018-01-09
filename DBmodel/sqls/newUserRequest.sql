@@ -7,16 +7,21 @@ CREATE or replace FUNCTION newUserRequest (name text, surname text, patronymic t
 --	$4 login пользователя обязательно
 --	$5 хэшированный пароль пользователя обязательно
 --	$6 ip пользователя
-	RETURNS boolean AS $$
+	RETURNS text AS $$
 DECLARE
 login_id int4;
+error text;
 begin
-	if $4 is null then
-		raise exception 'Необходимо задать логин';
+	if $4 = '' then
+		error := getError(1);
+		raise unique_violation 
+		USING MESSAGE = error;
 	else
 		begin
-			if $5 is null then
-				raise exception 'Необходимо задать пароль';
+			if $5 = '' then
+				error := getError(2);
+				raise unique_violation 
+				USING MESSAGE = error;
 			else
 				begin
 					select id into login_id from users.passwords where users.passwords.login = $4;
@@ -25,9 +30,10 @@ begin
 						insert into users.new_user_request (id, "name", surname, patronymic, login, pass, status, user_ip, "date")
 						values (default, $1, $2, $3, $4, $5, default, $6, default);
 						
-						return true;
+						return 'accepted';
 					else
-						raise exception 'пользователь с таким логином уже существует';
+						error := getError(101);
+						raise exception '%', error;
 					end if;
 				end; 
 			end if;

@@ -10,13 +10,16 @@ CREATE or replace FUNCTION newUser (name text, surname text, patronymic text, lo
 DECLARE
 user_id int4;
 login_id int4;
+error text;
 begin
 	if $4 is null then
-		raise exception 'Необходимо задать логин';
+		error := getError(1);
+		raise exception '%', error;
 	else
 		begin
 			if $5 is null then
-				raise exception 'Необходимо задать пароль';
+				error := getError(2);
+				raise exception '%', error;
 			else
 				begin
 					select id into login_id from users.passwords where users.passwords.login = $4;
@@ -31,7 +34,8 @@ begin
 						
 						return user_id;
 					else
-						raise exception 'пользователь с таким логином уже существует';
+						error := getError(101);
+						raise exception '%', error;
 					end if;
 				end; 
 			end if;

@@ -33,7 +33,14 @@ CREATE SCHEMA users;
 ALTER SCHEMA users OWNER TO postgres;
 -- ddl-end --
 
-SET search_path TO pg_catalog,public,rest,access,users;
+-- object: dictionary | type: SCHEMA --
+ DROP SCHEMA IF EXISTS dictionary CASCADE;
+CREATE SCHEMA dictionary;
+-- ddl-end --
+ALTER SCHEMA dictionary OWNER TO postgres;
+-- ddl-end --
+
+SET search_path TO pg_catalog,public,rest,access,users,dictionary;
 -- ddl-end --
 
 -- object: rest.ways | type: TABLE --
@@ -79,10 +86,11 @@ ALTER TABLE access.accesses OWNER TO postgres;
 -- DROP TABLE IF EXISTS users.users CASCADE;
 CREATE TABLE users.users(
 	id serial NOT NULL,
-	name text NOT NULL DEFAULT 'unknown',
+	name text DEFAULT 'unknown',
 	surname text,
 	patronymic text,
 	birthday date,
+	removed bool DEFAULT false,
 	CONSTRAINT user_pk PRIMARY KEY (id)
 
 );
@@ -145,7 +153,7 @@ CREATE TABLE users.new_user_request(
 	pass text NOT NULL,
 	status smallint NOT NULL DEFAULT 0,
 	user_ip text,
-	date date DEFAULT now(),
+	date timestamp DEFAULT now(),
 	CONSTRAINT new_user_request_pk PRIMARY KEY (id)
 
 );
@@ -161,12 +169,37 @@ CREATE TABLE users.connections(
 	id serial NOT NULL,
 	user_id int4 NOT NULL,
 	token text NOT NULL,
-	made date NOT NULL DEFAULT now(),
+	made timestamp NOT NULL DEFAULT now(),
+	removed bool DEFAULT false,
 	CONSTRAINT con_pk PRIMARY KEY (id)
 
 );
 -- ddl-end --
 ALTER TABLE users.connections OWNER TO postgres;
+-- ddl-end --
+
+-- object: dictionary.errors | type: TABLE --
+-- DROP TABLE IF EXISTS dictionary.errors CASCADE;
+CREATE TABLE dictionary.errors(
+	id serial NOT NULL,
+	code integer NOT NULL,
+	message text NOT NULL,
+	CONSTRAINT error_pk PRIMARY KEY (id)
+
+);
+-- ddl-end --
+ALTER TABLE dictionary.errors OWNER TO postgres;
+-- ddl-end --
+
+INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'1', E'Необходимо задать логин');
+-- ddl-end --
+INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'2', E'Необходимо задать пароль');
+-- ddl-end --
+INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'3', E'Необходимо задать токен');
+-- ddl-end --
+INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'101', E'пользователь с таким логином уже существует');
+-- ddl-end --
+INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'201', E'неизвестная ошибка');
 -- ddl-end --
 
 -- object: accesses_fk_ways | type: CONSTRAINT --

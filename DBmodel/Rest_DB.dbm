@@ -79,7 +79,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id" not-null="true">
 		<type name="serial" length="0"/>
 	</column>
-	<column name="name" not-null="true" default-value="'unknown'">
+	<column name="name" default-value="'unknown'">
 		<type name="text" length="0"/>
 	</column>
 	<column name="surname">
@@ -91,12 +91,15 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="birthday">
 		<type name="date" length="0"/>
 	</column>
+	<column name="removed" default-value="false">
+		<type name="bool" length="0"/>
+	</column>
 	<constraint name="user_pk" type="pk-constr" table="users.users">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 	<initial-data>
 <![CDATA[id•name•surname•patronymic•birthday⸣
-1•root•root•root•]]>
+•root•root•root•]]>
 	</initial-data>
 </table>
 
@@ -181,7 +184,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="text" length="0"/>
 	</column>
 	<column name="date" default-value="now()">
-		<type name="date" length="0"/>
+		<type name="timestamp" length="0"/>
 	</column>
 	<constraint name="new_user_request_pk" type="pk-constr" table="users.new_user_request">
 		<columns names="id" ref-type="src-columns"/>
@@ -191,7 +194,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="connections">
 	<schema name="users"/>
 	<role name="postgres"/>
-	<position x="829.333" y="744"/>
+	<position x="828.19" y="735.429"/>
 	<column name="id" not-null="true">
 		<type name="serial" length="0"/>
 	</column>
@@ -202,11 +205,45 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="text" length="0"/>
 	</column>
 	<column name="made" not-null="true" default-value="now()">
-		<type name="date" length="0"/>
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="removed" default-value="false">
+		<type name="bool" length="0"/>
 	</column>
 	<constraint name="con_pk" type="pk-constr" table="users.connections">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
+</table>
+
+<schema name="dictionary" rect-visible="true" fill-color="#4b3e56">
+	<role name="postgres"/>
+</schema>
+
+<table name="errors">
+	<schema name="dictionary"/>
+	<role name="postgres"/>
+	<position x="606.286" y="738.286"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="code" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="message" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<constraint name="error_pk" type="pk-constr" table="dictionary.errors">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<initial-data>
+<![CDATA[id•code•message⸣
+•1•Необходимо задать логин⸣
+•2•Необходимо задать пароль⸣
+•3•Необходимо задать токен⸣
+•101•Пользователь с таким логином уже существует⸣
+•201•Неизвестная ошибка⸣
+•301•Ваш connection token устарел]]>
+	</initial-data>
 </table>
 
 <constraint name="accesses_fk_ways" type="fk-constr" comparison-type="MATCH FULL"
