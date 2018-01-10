@@ -13,26 +13,26 @@ $sqlstr = "select * from newUserRequest( '"
     . hash('sha256', $data->pass) . "', '"
     . $_SERVER['REMOTE_ADDR'] . "');";
 
-do {
-    $repeat = false;
-    try {
-        pg::query("begin");
+//do {
+//    $repeat = false;
+//    try {
+//        pg::query("begin");
+//
+//        $result = pg::query($sqlstr);
+//
+//        pg::query("commit");
+//
+//        echo $result[0]['newuserrequest'];
+//    }
+//    catch (DependencyException $e) {
+//        pg::query("rollback");
+//        $repeat = true;
+//    }
+//    catch (PostgresException $e) {
+//         $mess; //".*"
+//         preg_match_all('/{"code":\s[0-9]{1,1000},\s*"message":\s*(".*")\s*}/', $e->getMessage(), $mess);
+//         echo $mess[0][0];
+//    }
+//} while ($repeat);
 
-        $result = pg::query($sqlstr);
-
-        pg::query("commit");
-
-        echo $result[0]['newuserrequest'];
-    }
-    catch (DependencyException $e) {
-        pg::query("rollback");
-        $repeat = true;
-    }
-    catch (PostgresException $e) {
-         $mess; //".*"
-         preg_match_all('/{"code":\s[0-9]{1,1000},\s*"message":\s*(".*")\s*}/', $e->getMessage(), $mess);
-         echo $mess[0][0];
-    }
-} while ($repeat);
-
-//echo json_encode($data);//, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+echo json_encode($_GET);//, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
