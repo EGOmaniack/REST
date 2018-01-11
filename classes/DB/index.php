@@ -38,4 +38,38 @@ class pg {
         return $out;
     }
 }
-?>
+
+function getFlowsInfo() {
+
+    $sqlstr = <<<EOT
+select rst.flow_name, rst.description, lvls.lvl_code
+  from
+    rest.flows rst
+    inner join
+    access.accesses_lvls lvls
+    on rst.min_access_lvl = lvls.id
+;
+EOT;
+
+    do {
+        $repeat = false;
+        try {
+            pg::query("begin");
+
+            $result = pg::query($sqlstr);
+
+            pg::query("commit");
+
+            return $result;
+        }
+        catch (DependencyException $e) {
+            pg::query("rollback");
+            $repeat = true;
+        }
+        catch (PostgresException $e) {
+            $mess; //".*"
+            preg_match_all('/{"code":\s[0-9]{1,1000},\s*"message":\s*(".*")\s*}/', $e->getMessage(), $mess);
+            echo $mess[0][0];
+        }
+    } while ($repeat);
+}

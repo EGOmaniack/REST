@@ -11,10 +11,10 @@ header("Access-Control-Allow-Origin: *");
 http_response_code (200);
 
 if($FloatRequest == 'NewPerson') {
-    $way = new Way("Identification", "NewPerson", "Registration");
+    $way = new Flow("NewPerson", "Registration");
     $initData = null;
 } else {
-    $way = new Way("Identification", "Enter", "Enter");
+    $way = new Flow("Enter", "Enter");
     $initData = null;
 }
 

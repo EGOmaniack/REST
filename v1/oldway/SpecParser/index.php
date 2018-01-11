@@ -4,9 +4,9 @@ include '../../../classes/index.php';
 
 header("Access-Control-Allow-Origin: *");
 http_response_code (200);
-$way = new Way("StartPage", "Start", "Cards");
+$way = new Flow("SpecParser", "SimpleSpecParser", "GetProjectInfo");
 $cards = new Cards(new Settings());
-$initData['packs'] = $cards -> getCards();
+$initData = $cards -> getFullInfo("SpecParcer");
 
 $Answer = new GetWayAnswer($way, $initData);
 

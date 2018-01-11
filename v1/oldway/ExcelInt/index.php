@@ -4,10 +4,11 @@ include '../../../classes/index.php';
 
 header("Access-Control-Allow-Origin: *");
 http_response_code (200);
-$way = new Way("ExcelInt", "SimpleExcelInt", "MergeCalc");
+$flow = new Flow("SimpleExcelInt", "MergeCalc");
 $cards = new Cards(new Settings());
 $initData = $cards -> getFullInfo("ExcelInt");
 
-$Answer = new GetWayAnswer($way, $initData);
+$Answer['flow'] = $flow;// $initData);
+$Answer['initData'] = $initData;
 
 echo json_encode($Answer, JSON_UNESCAPED_UNICODE );

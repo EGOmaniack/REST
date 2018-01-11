@@ -18,3 +18,11 @@ select * from logInUser(cast ('81f6ae525527bb1062ec1af6b9df7bf9' as text));
 select * from users.connections;
 
 select * from acceptUserRequest(32);
+select * from rest.flows;
+
+select rst.flow_name, rst.description, lvls.lvl_code
+	from rest.flows rst
+	inner join
+	access.accesses_lvls lvls
+	on rst.min_access_lvl = lvls.id
+;
