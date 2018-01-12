@@ -14,32 +14,36 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <schema name="rest" rect-visible="true" fill-color="#94e1e5">
 </schema>
 
-<table name="ways">
+<table name="flows">
 	<schema name="rest"/>
 	<role name="postgres"/>
-	<position x="595" y="849"/>
+	<position x="153.857" y="953"/>
 	<column name="id" not-null="true">
 		<type name="serial" length="0"/>
 	</column>
-	<column name="way_name" not-null="true">
+	<column name="flow_name" not-null="true">
 		<type name="text" length="0"/>
-		<comment><![CDATA[имя пути]]></comment>
+		<comment><![CDATA[имя потока]]></comment>
 	</column>
 	<column name="description">
 		<type name="text" length="0"/>
 	</column>
-	<constraint name="ways_pk" type="pk-constr" table="rest.ways">
+	<column name="min_access_lvl" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<constraint name="ways_pk" type="pk-constr" table="rest.flows">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
-	<constraint name="ways_uq" type="uq-constr" table="rest.ways">
-		<columns names="way_name" ref-type="src-columns"/>
+	<constraint name="ways_uq" type="uq-constr" table="rest.flows">
+		<columns names="flow_name" ref-type="src-columns"/>
 	</constraint>
 	<initial-data>
-<![CDATA[id•way_name•description⸣
-•StartPage•Стартовая страница⸣
-•ExcelInt•Помощьв в калькуляциях⸣
-•SpecParcer•Работа с проектом для создания маршруток и др⸣
-•Identification•Профиль, регистрация и тд]]>
+<![CDATA[id•flow_name•description•min_access_lvl⸣
+•StartPage•Стартовая страница•4⸣
+•SimpleExcelInt•Помощьв в калькуляциях•4⸣
+•SimpleSpecParser•Работа с проектом для создания маршруток и др•4⸣
+•NewPerson•Профиль, регистрация и тд•4⸣
+•Authorization•Авторизация•4]]>
 	</initial-data>
 </table>
 
@@ -50,7 +54,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="accesses">
 	<schema name="access"/>
 	<role name="postgres"/>
-	<position x="597" y="956"/>
+	<position x="168.429" y="734.286"/>
 	<column name="id" not-null="true">
 		<type name="serial" length="0"/>
 	</column>
@@ -75,7 +79,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="users">
 	<schema name="users"/>
 	<role name="postgres"/>
-	<position x="830" y="859"/>
+	<position x="403.714" y="727.571"/>
 	<column name="id" not-null="true">
 		<type name="serial" length="0"/>
 	</column>
@@ -106,7 +110,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="accesses_lvls">
 	<schema name="access"/>
 	<role name="postgres"/>
-	<position x="632" y="1063"/>
+	<position x="201.714" y="837.857"/>
 	<column name="id" not-null="true">
 		<type name="serial" length="0"/>
 	</column>
@@ -124,15 +128,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 •admin•admin⸣
 •boss•начальник⸣
 •regular•обычный уровень доступа ( допущен )⸣
-•guest•уровень доступа как у гостя без регистрации⸣
-•no_access•нет доступа]]>
+•guest•уровень доступа как у гостя без регистрации]]>
 	</initial-data>
 </table>
 
 <table name="passwords">
 	<schema name="users"/>
 	<role name="postgres"/>
-	<position x="1030" y="857"/>
+	<position x="605.429" y="729"/>
 	<column name="id" not-null="true">
 		<type name="serial" length="0"/>
 	</column>
@@ -160,7 +163,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="new_user_request">
 	<schema name="users"/>
 	<role name="postgres"/>
-	<position x="1036" y="981"/>
+	<position x="611.429" y="853"/>
 	<column name="id" not-null="true">
 		<type name="serial" length="0"/>
 	</column>
@@ -197,7 +200,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="connections">
 	<schema name="users"/>
 	<role name="postgres"/>
-	<position x="828.19" y="735.429"/>
+	<position x="403.619" y="607.429"/>
 	<column name="id" not-null="true">
 		<type name="serial" length="0"/>
 	</column>
@@ -225,7 +228,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="errors">
 	<schema name="dictionary"/>
 	<role name="postgres"/>
-	<position x="606.286" y="738.286"/>
+	<position x="181.715" y="610.286"/>
 	<column name="id" not-null="true">
 		<type name="serial" length="0"/>
 	</column>
@@ -249,8 +252,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</initial-data>
 </table>
 
+<constraint name="flows_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="access.accesses_lvls" table="rest.flows">
+	<columns names="min_access_lvl" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
 <constraint name="accesses_fk_ways" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="rest.ways" table="access.accesses">
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="rest.flows" table="access.accesses">
 	<columns names="way_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
@@ -281,10 +290,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <relationship name="rel_accesses_ways" type="relfk"
 	 src-table="access.accesses"
-	 dst-table="rest.ways"
+	 dst-table="rest.flows"
 	 src-required="false" dst-required="false">
 	<label ref-type="name-label">
-		<position x="-59.0243" y="-2.94853"/>
+		<position x="52.19" y="14.6229"/>
 	</label>
 </relationship>
 
@@ -325,5 +334,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-table="users.connections"
 	 dst-table="users.users"
 	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_flows_accesses_lvls" type="relfk"
+	 src-table="rest.flows"
+	 dst-table="access.accesses_lvls"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-77.7243" y="-28.3057"/>
+	</label>
+</relationship>
 
 </dbmodel>

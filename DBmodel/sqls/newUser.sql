@@ -24,7 +24,7 @@ begin
 				begin
 					select id into login_id from users.passwords where users.passwords.login = $4;
 					if not found then
-				
+
 						insert into users.users(id, "name", surname, patronymic)
 						values (default, $1, $2, $3)
 						returning id into user_id;

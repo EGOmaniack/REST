@@ -43,29 +43,32 @@ ALTER SCHEMA dictionary OWNER TO postgres;
 SET search_path TO pg_catalog,public,rest,access,users,dictionary;
 -- ddl-end --
 
--- object: rest.ways | type: TABLE --
--- DROP TABLE IF EXISTS rest.ways CASCADE;
-CREATE TABLE rest.ways(
+-- object: rest.flows | type: TABLE --
+ DROP TABLE IF EXISTS rest.flows CASCADE;
+CREATE TABLE rest.flows(
 	id serial NOT NULL,
-	way_name text NOT NULL,
+	flow_name text NOT NULL,
 	description text,
+	min_access_lvl smallint NOT NULL,
 	CONSTRAINT ways_pk PRIMARY KEY (id),
-	CONSTRAINT ways_uq UNIQUE (way_name)
+	CONSTRAINT ways_uq UNIQUE (flow_name)
 
 );
 -- ddl-end --
-COMMENT ON COLUMN rest.ways.way_name IS 'имя пути';
+COMMENT ON COLUMN rest.flows.flow_name IS 'имя потока';
 -- ddl-end --
-ALTER TABLE rest.ways OWNER TO postgres;
+ALTER TABLE rest.flows OWNER TO postgres;
 -- ddl-end --
 
-INSERT INTO rest.ways (id, way_name, description) VALUES (DEFAULT, E'StartPage', E'Стартовая страница');
+INSERT INTO rest.flows (id, flow_name, description, min_access_lvl) VALUES (DEFAULT, E'StartPage', E'Стартовая страница', E'4');
 -- ddl-end --
-INSERT INTO rest.ways (id, way_name, description) VALUES (DEFAULT, E'ExcelInt', E'Помощьв в калькуляциях');
+INSERT INTO rest.flows (id, flow_name, description, min_access_lvl) VALUES (DEFAULT, E'SimpleExcelInt', E'Помощьв в калькуляциях', E'4');
 -- ddl-end --
-INSERT INTO rest.ways (id, way_name, description) VALUES (DEFAULT, E'SpecParcer', E'Работа с проектом для создания маршруток и др');
+INSERT INTO rest.flows (id, flow_name, description, min_access_lvl) VALUES (DEFAULT, E'SimpleSpecParser', E'Работа с проектом для создания маршруток и др', E'4');
 -- ddl-end --
-INSERT INTO rest.ways (id, way_name, description) VALUES (DEFAULT, E'Identification', E'Профиль, регистрация и тд');
+INSERT INTO rest.flows (id, flow_name, description, min_access_lvl) VALUES (DEFAULT, E'NewPerson', E'Профиль, регистрация и тд', E'4');
+-- ddl-end --
+INSERT INTO rest.flows (id, flow_name, description, min_access_lvl) VALUES (DEFAULT, E'Authorization', E'Авторизация', E'4');
 -- ddl-end --
 
 -- object: access.accesses | type: TABLE --
@@ -122,8 +125,6 @@ INSERT INTO access.accesses_lvls (id, lvl_code, description) VALUES (DEFAULT, E'
 -- ddl-end --
 INSERT INTO access.accesses_lvls (id, lvl_code, description) VALUES (DEFAULT, E'guest', E'уровень доступа как у гостя без регистрации');
 -- ddl-end --
-INSERT INTO access.accesses_lvls (id, lvl_code, description) VALUES (DEFAULT, E'no_access', E'нет доступа');
--- ddl-end --
 
 -- object: users.passwords | type: TABLE --
 -- DROP TABLE IF EXISTS users.passwords CASCADE;
@@ -132,7 +133,8 @@ CREATE TABLE users.passwords(
 	user_id int4 NOT NULL,
 	login text NOT NULL,
 	pass text NOT NULL,
-	CONSTRAINT passwords_pk PRIMARY KEY (id)
+	CONSTRAINT passwords_pk PRIMARY KEY (id),
+	CONSTRAINT passwords_uq UNIQUE (login)
 
 );
 -- ddl-end --
@@ -197,15 +199,24 @@ INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'2', E'Не�
 -- ddl-end --
 INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'3', E'Необходимо задать токен');
 -- ddl-end --
-INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'101', E'пользователь с таким логином уже существует');
+INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'101', E'Пользователь с таким логином уже существует');
 -- ddl-end --
-INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'201', E'неизвестная ошибка');
+INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'201', E'Неизвестная ошибка');
+-- ddl-end --
+INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'301', E'Ваш connection token устарел');
+-- ddl-end --
+
+-- object: flows_fk | type: CONSTRAINT --
+-- ALTER TABLE rest.flows DROP CONSTRAINT IF EXISTS flows_fk CASCADE;
+ALTER TABLE rest.flows ADD CONSTRAINT flows_fk FOREIGN KEY (min_access_lvl)
+REFERENCES access.accesses_lvls (id) MATCH FULL
+ON DELETE NO ACTION ON UPDATE NO ACTION;
 -- ddl-end --
 
 -- object: accesses_fk_ways | type: CONSTRAINT --
 -- ALTER TABLE access.accesses DROP CONSTRAINT IF EXISTS accesses_fk_ways CASCADE;
 ALTER TABLE access.accesses ADD CONSTRAINT accesses_fk_ways FOREIGN KEY (way_id)
-REFERENCES rest.ways (id) MATCH FULL
+REFERENCES rest.flows (id) MATCH FULL
 ON DELETE NO ACTION ON UPDATE NO ACTION;
 -- ddl-end --
 
