@@ -1,34 +1,39 @@
 <?php
-session_start();
-header("Access-Control-Allow-Origin: *");
-include '../../classes/index.php';
 
-$sessionWork = new SessionWork();
+//ini_set('display_errors', 0) ;
+
+//header("Access-Control-Allow-Origin: http://localhost:9002");
+header("Access-Control-Allow-Origin: ".$_SERVER['HTTP_ORIGIN']);
+header('Access-Control-Allow-Credentials: true');
+
 /*
  * Скрипт принимает запросы на смену Flow и в зависимости от Уровня доступа выдает тот или иной flow и state + initData
 */
-if(isset($_GET['flowName'])) {
-    $userFlowName = $_GET['flowName'];
-    $accesLvl = $sessionWork->getAccessLvl();
 
-    $flowsInfo = getFlowsInfo();
+function changeFlow($newFlowName) {
+    if($newFlowName) {
+        $flowsInfo = getFlowsInfo();
 
-    $validFlowName = false;
-    foreach ($flowsInfo as $flow) {
-        if(in_array($userFlowName, $flow)) {
-            $validFlowName = true;
-            break;
+        $validFlowName = false;
+        foreach ($flowsInfo as $flow) {
+            if(in_array($newFlowName, $flow)) {
+                $validFlowName = true;
+                break;
+            }
         }
-    }
-    if($validFlowName) {
-        include '../flows/' . $userFlowName . '/init.php';
+        if($validFlowName) {
+            include '../flows/' . $newFlowName . '/init.php';
+        } else {
+            include '../flows/StartPage/init.php';
+        }
+
     } else {
         include '../flows/StartPage/init.php';
     }
-
-
-} else {
-    include '../flows/StartPage/init.php';
 }
-
+if(isset($_GET['flowName'])) {
+    $newFlowName = $_GET['flowName'];
+    include '../../classes/index.php';
+    changeFlow($newFlowName);
+}
 //echo '{"get":' . json_encode($_GET) . '}';//, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

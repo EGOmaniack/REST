@@ -40,7 +40,6 @@ class Cards {
         foreach ($this->DBcards as $card) {
             if($card['flowName'] == $flowName){
 
-                header("Access-Control-Allow-Origin: *");
                 return $card;
             }
         }

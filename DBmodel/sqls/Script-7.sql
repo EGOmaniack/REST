@@ -14,10 +14,10 @@ set status = 1
 where id = 1;
 
 select * from logInUser('root', CAST('cef9be2622851fe89ad9a686e3e38b8b9c6fc1a371a1a84cb09c52de7669c8b6' as text));
-select * from logInUser(cast ('81f6ae525527bb1062ec1af6b9df7bf9' as text));
+select * from logInUser(cast ('403274c20d9b6974fe6548494f6fc1f7' as text));
 select * from users.connections;
 
-select * from acceptUserRequest(32);
+select * from acceptUserRequest(14);
 select * from rest.flows;
 
 select rst.flow_name, rst.description, lvls.lvl_code

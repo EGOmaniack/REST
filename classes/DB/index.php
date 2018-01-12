@@ -41,7 +41,7 @@ class pg {
 
 function getFlowsInfo() {
 
-    $sqlstr = <<<EOT
+$sqlstr = <<<EOT
 select rst.flow_name, rst.description, lvls.lvl_code
   from
     rest.flows rst
@@ -69,7 +69,61 @@ EOT;
         catch (PostgresException $e) {
             $mess; //".*"
             preg_match_all('/{"code":\s[0-9]{1,1000},\s*"message":\s*(".*")\s*}/', $e->getMessage(), $mess);
+            header("HTTP/1.0 400 Bad Request");
             echo $mess[0][0];
+            exit;
+        }
+    } while ($repeat);
+}
+
+function sqlFunction(string $query, string $funcName) {
+    do {
+        $repeat = false;
+        try {
+            pg::query("begin");
+
+            $result = pg::query($query);
+
+            pg::query("commit");
+
+            return $result[0][$funcName];
+        }
+        catch (DependencyException $e) {
+            pg::query("rollback");
+            $repeat = true;
+        }
+        catch (PostgresException $e) {
+            $mess; //".*"
+            preg_match_all('/{"code":\s[0-9]{1,1000},\s*"message":\s*(".*")\s*}/', $e->getMessage(), $mess);
+            header("HTTP/1.0 400 Not Acceptable");
+            echo $mess[0][0];
+            exit;
+        }
+    } while ($repeat);
+}
+
+function standartSql (string $query) {
+    do {
+        $repeat = false;
+        try {
+            pg::query("begin");
+
+            $result = pg::query($query);
+
+            pg::query("commit");
+
+            return $result;
+        }
+        catch (DependencyException $e) {
+            pg::query("rollback");
+            $repeat = true;
+        }
+        catch (PostgresException $e) {
+            $mess; //".*"
+            preg_match_all('/{"code":\s[0-9]{1,1000},\s*"message":\s*(".*")\s*}/', $e->getMessage(), $mess);
+            header("HTTP/1.0 400 Not Acceptable");
+            echo $mess[0][0];
+            exit;
         }
     } while ($repeat);
 }

@@ -1,9 +1,12 @@
 <?php
 
-header("Access-Control-Allow-Origin: *");
 http_response_code (200);
 
 $flow= new Flow("StartPage", "Cards");
+
+$sessionWork = new SessionWork();
+$sessionWork->pushWorkflowState($flow);
+
 $cards = new Cards(new Settings());
 $initData['packs'] = $cards -> getCards();
 

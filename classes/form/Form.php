@@ -1,16 +1,18 @@
 <?php
 
 class RubberField {
-    public $fieldType; //textInput | checkbox ...
+    public $fieldType; //textInput | pass | checkbox ...
     public $fieldLabel;
     public $fieldName;
     public $value;
+    public $required;
 
-    public function __construct($fieldName, $fieldLabel, $fieldType = 'textInput', $value = '') {
+    public function __construct($fieldName, $fieldLabel, $value = '', $required = false, $fieldType = 'textInput') {
         $this->fieldType = $fieldType;
         $this->fieldLabel = $fieldLabel;
         $this->fieldName = $fieldName;
         $this->value = $value;
+        $this->required = $required;
     }
 }
 
