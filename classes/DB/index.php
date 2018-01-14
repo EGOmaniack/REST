@@ -40,7 +40,7 @@ class pg {
 }
 
 function getFlowsInfo() {
-
+// Наданный момент не используется
 $sqlstr = <<<EOT
 select rst.flow_name, rst.description, lvls.lvl_code
   from

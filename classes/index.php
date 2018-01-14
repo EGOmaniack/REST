@@ -1,6 +1,6 @@
 <?php
 session_start();
-//session_destroy ( );
+// session_destroy();
 if (!defined('MY_CLASSES_ROOT')) {
     define('MY_CLASSES_ROOT', str_replace("\\", "/", dirname(__FILE__) . '/') );
 

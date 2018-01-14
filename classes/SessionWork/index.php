@@ -62,13 +62,12 @@ class SessionWork {
     }
 
     public function rollBack() {
-//        var_dump($this->currentWorkflow);exit;
         // убрали предыдущий flow из стека
         $this->popWorkflowState();
         // запускаем предыдущий стэйт
         $newFlowName = $this->getCurrentWorkflow();
         include '../../v1/changeFlow/index.php';
-        changeFlow($newFlowName);
+        changeFlow($newFlowName->getFlowName());
     }
 
 }

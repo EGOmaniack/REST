@@ -12,17 +12,11 @@ header('Access-Control-Allow-Credentials: true');
 
 function changeFlow($newFlowName) {
     if($newFlowName) {
-        $flowsInfo = getFlowsInfo();
 
-        $validFlowName = false;
-        foreach ($flowsInfo as $flow) {
-            if(in_array($newFlowName, $flow)) {
-                $validFlowName = true;
-                break;
-            }
-        }
-        if($validFlowName) {
-            include '../flows/' . $newFlowName . '/init.php';
+        $path = '../flows/' . $newFlowName . '/init.php';
+
+        if(file_exists($path)) {
+            include $path;
         } else {
             include '../flows/StartPage/init.php';
         }
