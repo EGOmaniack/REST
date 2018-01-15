@@ -10,21 +10,16 @@ header('Access-Control-Allow-Credentials: true');
  * Скрипт принимает запросы на смену Flow и в зависимости от Уровня доступа выдает тот или иной flow и state + initData
 */
 
-function changeFlow($newFlowName) {
-    if($newFlowName) {
+function changeFlow($newFlowName = "StartPage") {
+    $path = '../flows/' . $newFlowName . '/init.php';
 
-        $path = '../flows/' . $newFlowName . '/init.php';
-
-        if(file_exists($path)) {
-            include $path;
-        } else {
-            include '../flows/StartPage/init.php';
-        }
-
+    if(file_exists($path)) {
+        include $path;
     } else {
         include '../flows/StartPage/init.php';
     }
 }
+
 if(isset($_GET['flowName'])) {
     $newFlowName = $_GET['flowName'];
     include '../../classes/index.php';

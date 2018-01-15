@@ -4,13 +4,13 @@ class Flow {
     public $flowName;
     public $stateName;
 
-    public function __construct($flowName, $stateName){
+    public function __construct($flowName, $stateName = 'default'){
         $this->flowName = $flowName;
         $this->stateName = $stateName;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getFlowName()
     {
@@ -18,15 +18,15 @@ class Flow {
     }
 
     /**
-     * @param mixed $flowName
+     * @param string $flowName
      */
-    public function setFlowName($flowName)
+    public function setFlowName(string $flowName)
     {
         $this->flowName = $flowName;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getStateName()
     {
@@ -34,10 +34,11 @@ class Flow {
     }
 
     /**
-     * @param mixed $stateName
+     * @param string $stateName
      */
-    public function setStateName($stateName)
+    public function setStateName(string $stateName)
     {
         $this->stateName = $stateName;
     }
+
 }

@@ -4,6 +4,24 @@ class SessionWork {
 
     private $user;
     private $currentWorkflow;
+    private $subFlowTask;
+    private $subflow;
+
+    public function __construct () {
+        if(isset($_SESSION['user']) && isset($_SESSION['workflow'])) {
+//            echo json_encode($_SESSION); exit;
+            $this->user = unserialize($_SESSION['user']);
+            $this->currentWorkflow = unserialize($_SESSION['workflow']);
+        } else {
+            $this->user = new User();
+            $_SESSION['user'] = serialize($this->user);
+            $this->resetWorkflowState();
+        }
+        if(isset($_SESSION['subflowtask']) && isset($_SESSION['subflow'])) {
+            $this->subFlowTask = unserialize($_SESSION['subflowtask']);
+            $this->subflow = unserialize($_SESSION['subflow']);
+        }
+    }
 
     public function getAccessLvl() {
         return 'guest';
@@ -16,6 +34,8 @@ class SessionWork {
         if($this->currentWorkflow[$workflowsCount-1]->getFlowName() != $newFlow->getFlowName()) {
             $this->currentWorkflow[] = $newFlow;
             $_SESSION['workflow'] = serialize($this->currentWorkflow);
+        } else {
+            $this->upDateWorkflowState($newFlow);
         }
     }
 
@@ -30,6 +50,7 @@ class SessionWork {
             $this->resetWorkflowState();
         }
     }
+
     public function popWorkflowState() {
         $workflowsCount = count($this->currentWorkflow);
         if($workflowsCount > 1) {
@@ -39,21 +60,10 @@ class SessionWork {
             $this->resetWorkflowState();
         }
     }
-    public function getCurrentWorkflow() {
+
+    public function getCurrentWorkflow(): Flow {
         $workflowsCount = count($this->currentWorkflow);
         return $this->currentWorkflow[$workflowsCount-1];
-    }
-
-    public function __construct () {
-        if(isset($_SESSION['user']) && isset($_SESSION['workflow'])) {
-//            echo json_encode($_SESSION); exit;
-            $this->user = unserialize($_SESSION['user']);
-            $this->currentWorkflow = unserialize($_SESSION['workflow']);
-        } else {
-            $this->user = new User();
-            $_SESSION['user'] = serialize($this->user);
-            $this->resetWorkflowState();
-        }
     }
 
     private function resetWorkflowState() {
@@ -62,12 +72,74 @@ class SessionWork {
     }
 
     public function rollBack() {
-        // убрали предыдущий flow из стека
-        $this->popWorkflowState();
+        if($this->subFlowTask['done']) {
+            // убрали предыдущий flow из стека
+            $this->popWorkflowState();
+        } else {
+            $this->subFlowTask['done'] = true;
+        }
         // запускаем предыдущий стэйт
         $newFlowName = $this->getCurrentWorkflow();
         include '../../v1/changeFlow/index.php';
         changeFlow($newFlowName->getFlowName());
+    }
+
+    public function newSubFlowTask(SubFlowTask $subFlTask) {
+        $this->subFlowTask['task'] = $subFlTask;
+        $this->subFlowTask['done'] = false;
+
+        $_SESSION['subflowtask'] = serialize($this->subFlowTask);
+    }
+
+    public function startSubFlow(Flow $subFlow, Flow $initializer) {
+        $this->subflow['flow'] = $subFlow;
+        $this->subflow['initializer'] = $initializer;
+        $_SESSION['subflow'] = serialize($this->subflow);
+        include_once '../../v1/changeFlow/index.php';
+        changeFlow($this->subflow['flow']->getFlowName());
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasSubFlowTask(): bool {
+        $hasSubTask = false;
+
+        if(isset($this->subFlowTask) && !$this->subFlowTask['done']) {
+            $hasSubTask = true;
+        }
+
+        return $hasSubTask;
+    }
+
+    /**
+     * @return SubFlowTask
+     */
+    public function getSubFlowTask(): SubFlowTask {
+//        var_dump($this->subFlowTask); exit;
+
+        return $this->subFlowTask['task'];
+    }
+
+    public function getFlowSubFlowName(): string {
+        $flowName = $this->getCurrentWorkflow()->getFlowName();
+
+        if(isset($this->subFlowTask) && !$this->subFlowTask['done']) {
+            $flowName = $this->subflow['flow']->getFlowName();
+        }
+        return $flowName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubflowInitializerName(): string
+    {
+        string: $result = '';
+        if(isset($this->subflow)) {
+            $result = $this->subflow['initializer']->getFlowName();
+        }
+        return $result;
     }
 
 }

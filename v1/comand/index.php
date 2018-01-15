@@ -6,13 +6,13 @@ header("Access-Control-Allow-Origin: ".$_SERVER['HTTP_ORIGIN']);
 header('Access-Control-Allow-Credentials: true');
 
 $sessionWork = new SessionWork();
-$currentWorkflow = $sessionWork->getCurrentWorkflow();
+$currentFlowSubFlowName = $sessionWork->getFlowSubFlowName();
 
 $data = $_GET;
 
 switch ($data['comand']) {
     case 'EVENT':
-        include '../flows/' . $currentWorkflow->getFlowName() . '/' . $data['name'] . ".php";
+        include '../flows/' . $currentFlowSubFlowName . '/' . $data['name'] . ".php";
         break;
     case 'ROLLBACK':
         $sessionWork->rollBack();

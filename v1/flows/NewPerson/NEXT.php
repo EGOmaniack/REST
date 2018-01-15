@@ -1,6 +1,5 @@
 <?php
 
-$getData = $_GET;
 $data = json_decode($_POST['json']);
 
 $sqlstr = "select * from newUserRequest( '"
