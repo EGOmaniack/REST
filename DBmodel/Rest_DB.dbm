@@ -163,7 +163,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 	<initial-data>
 <![CDATA[id•user_id•login•pass⸣
-•1•root•bf01fc0344b08285c749e34db1ac51526ce944b2b7c032e109040cbdeeba458f]]>
+•1•root•4829b0b2a8ae6aebdafb55f96dcb08413d11a92ff0f916d1fa25b64e51c56808]]>
 	</initial-data>
 </table>
 
@@ -255,6 +255,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 •3•Необходимо задать токен⸣
 •101•Пользователь с таким логином уже существует⸣
 •201•Неизвестная ошибка⸣
+•202•Не найдено⸣
 •301•Ваш connection token устарел]]>
 	</initial-data>
 </table>

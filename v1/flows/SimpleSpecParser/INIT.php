@@ -13,7 +13,6 @@ switch ($accesLvl) {
 
         $Answer['flow'] = $flow;// $initData);
         $Answer['initData'] = $initData;
-        $Answer['currentFlow'] = $sessionWork->getCurrentWorkflow()->getFlowName();
 
         echo json_encode($Answer, JSON_UNESCAPED_UNICODE);
 }

@@ -12,7 +12,7 @@ $initData['packs'] = $cards -> getCards();
 
 $Answer['flow'] = $flow;// $initData);
 $Answer['initData'] = $initData;
-$Answer['sess0'] = $_SESSION;
+//$Answer['sess0'] = $_SESSION;
 
 echo json_encode($Answer, JSON_UNESCAPED_UNICODE );
 

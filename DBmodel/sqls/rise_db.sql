@@ -145,7 +145,7 @@ CREATE TABLE users.passwords(
 ALTER TABLE users.passwords OWNER TO postgres;
 -- ddl-end --
 
-INSERT INTO users.passwords (id, user_id, login, pass) VALUES (DEFAULT, E'1', E'root', E'bf01fc0344b08285c749e34db1ac51526ce944b2b7c032e109040cbdeeba458f');
+INSERT INTO users.passwords (id, user_id, login, pass) VALUES (DEFAULT, E'1', E'root', E'4829b0b2a8ae6aebdafb55f96dcb08413d11a92ff0f916d1fa25b64e51c56808');
 -- ddl-end --
 
 -- object: users.new_user_request | type: TABLE --
@@ -206,6 +206,8 @@ INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'3', E'Не�
 INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'101', E'Пользователь с таким логином уже существует');
 -- ddl-end --
 INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'201', E'Неизвестная ошибка');
+-- ddl-end --
+INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'202', E'Не найдено');
 -- ddl-end --
 INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'301', E'Ваш connection token устарел');
 -- ddl-end --

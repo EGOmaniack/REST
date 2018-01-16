@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: User
@@ -16,16 +17,12 @@ foreach ($form as $step)
 //Валидируем данные
 //
 
-$sqlstr = "select * from newUserRequest( '"
-    . $info['name'] . "', '"
-    . $info['sName'] . "', '"
-    . $info['patronymic'] . "', '"
-    . $info['nickName'] . "', '"
-    . hash('sha256', $info['pass']) . "', '"
-    . $_SERVER['REMOTE_ADDR'] . "');";
+$sqlstr = "select * from LoginUser( '"
+    . $info['userlogin'] . "', '"
+    . hash('sha256', $info['loginpass']) . "');";
 
-$answer = sqlFunction($sqlstr);
-
+$answer = sqlFunction($sqlstr, 'loginuser');
+//var_dump($answer);exit;
 if($answer['status'] == 'OK') {
     $sessionWork->setUserRegSended();
     $sessionWork->freeSubflow();

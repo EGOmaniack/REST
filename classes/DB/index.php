@@ -76,7 +76,8 @@ EOT;
     } while ($repeat);
 }
 
-function sqlFunction(string $query, string $funcName) {
+function sqlFunction(string $query) {
+//    return '{"status" : "ok"}';
     do {
         $repeat = false;
         try {
@@ -85,8 +86,7 @@ function sqlFunction(string $query, string $funcName) {
             $result = pg::query($query);
 
             pg::query("commit");
-
-            return $result[0][$funcName];
+            return json_decode('{"status": "OK", "answer": ' . json_encode($result[0], JSON_UNESCAPED_UNICODE) . '}', true);
         }
         catch (DependencyException $e) {
             pg::query("rollback");
@@ -95,9 +95,8 @@ function sqlFunction(string $query, string $funcName) {
         catch (PostgresException $e) {
             $mess; //".*"
             preg_match_all('/{"code":\s[0-9]{1,1000},\s*"message":\s*(".*")\s*}/', $e->getMessage(), $mess);
-            header("HTTP/1.0 400 Not Acceptable");
-            echo $mess[0][0];
-            exit;
+//            header("HTTP/1.0 400 Not Acceptable");
+            return json_decode('{"status": "ERROR", "answer": ' . $mess[0][0] . '}', true);
         }
     } while ($repeat);
 }

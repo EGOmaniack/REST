@@ -183,4 +183,11 @@ class SessionWork {
         unset($_SESSION['subflow']);
     }
 
+    public function SubFlowTaskAddStep(): bool
+    {
+        $added = $this->getSubFlowTask()->addStep();
+        $_SESSION['subflowtask'] = serialize($this->subFlowTask);
+        return $added;
+    }
+
 }
