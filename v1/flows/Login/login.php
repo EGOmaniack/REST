@@ -26,5 +26,14 @@ $answer = sqlFunction($sqlstr, 'loginuser');
 if($answer['status'] == 'OK') {
     $sessionWork->setUserRegSended();
     $sessionWork->freeSubflow();
+    $token['token'] = $answer['answer']['newusertoken'];
+    $sessionWork->setDopInfo($token);
     $sessionWork->rollBack();
+} else if($answer['status'] == 'ERROR'){
+    if($answer['answer']['code'] == 202) {
+        $sessionWork->freeSubflow();
+        include 'getLoginData.php';
+        getLoginData($sessionWork, $flow, $answer['answer']['message']);
+    }
+//    var_dump($answer);exit;
 }

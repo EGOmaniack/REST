@@ -8,8 +8,8 @@
 http_response_code(200);
 
 $sessionWork->pushWorkflowState($flow);
-$form = new Form(2, 'Регистрация',
-    'Заполните поля отмеченные *', 'reg', 'registration');
+$form = new Form(array('Информация о вас', 'данные для входа'), 'Регистрация',
+    'Заполните поля отмеченные *', 'reg', 'registration', '');
 $form->addField(new RubberField('name'));
 $form->addField(new RubberField('sName'));
 $form->addField(new RubberField('patronymic'));

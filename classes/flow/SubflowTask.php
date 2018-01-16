@@ -47,7 +47,7 @@ class SubflowTask {
     public function addStep(): bool {
         $this->toEditForm->currentStep++;
         $havMoreSteps = true;
-        if($this->toEditForm->currentStep > $this->toEditForm->steps) {
+        if($this->toEditForm->currentStep > count($this->toEditForm->steps)) {
             $havMoreSteps = false;
         }
         return $havMoreSteps;

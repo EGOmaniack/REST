@@ -23,7 +23,7 @@ begin
 						where pswds.login = $1
 						and pswds.pass = $2;
 					if not found then
-						error := getError(2);
+						error := getError(202);
 						raise exception '%', error;
 --						return table(null, null);
 					else

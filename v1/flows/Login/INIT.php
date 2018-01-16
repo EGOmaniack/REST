@@ -14,4 +14,5 @@ if($sessionWork->getSubFlowTargetName() == $flow->getFlowName()
 } else {
     //это если пришли сюда первый раз
     include 'getLoginData.php';
+    getLoginData($sessionWork, $flow);
 }

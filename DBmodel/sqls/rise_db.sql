@@ -207,7 +207,7 @@ INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'101', E'П�
 -- ddl-end --
 INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'201', E'Неизвестная ошибка');
 -- ddl-end --
-INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'202', E'Не найдено');
+INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'202', E'Пользователь с таким логином и паролем не найден');
 -- ddl-end --
 INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'301', E'Ваш connection token устарел');
 -- ddl-end --

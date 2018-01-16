@@ -22,10 +22,11 @@ class Form {
     public $validationFuncName;
     public $buttonLabel;
     public $currentStep;
+    public $errorMessage;
 
     public $currentStepFields;
 
-    public function __construct($steps, $formTitle, $formSubtitle, $buttonLabel, $validationFuncName){
+    public function __construct($steps, $formTitle, $formSubtitle, $buttonLabel, $validationFuncName, $errorMessage){
         $this->steps = $steps;
         $this->formTitle = $formTitle;
         $this->formSubTitle = $formSubtitle;
@@ -33,6 +34,7 @@ class Form {
         $this->validationFuncName = $validationFuncName;
         $this->currentStep = 1;
         $this->rubberFields = array();
+        $this->errorMessage = $errorMessage;
     }
     public function setCurrentStep(int $i) {
         $this->currentStep = $i;
