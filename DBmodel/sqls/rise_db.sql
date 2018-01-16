@@ -44,7 +44,7 @@ SET search_path TO pg_catalog,public,rest,access,users,dictionary;
 -- ddl-end --
 
 -- object: rest.flows | type: TABLE --
- DROP TABLE IF EXISTS rest.flows CASCADE;
+-- DROP TABLE IF EXISTS rest.flows CASCADE;
 CREATE TABLE rest.flows(
 	id serial NOT NULL,
 	flow_name text NOT NULL,
@@ -60,22 +60,24 @@ COMMENT ON COLUMN rest.flows.flow_name IS 'имя потока';
 ALTER TABLE rest.flows OWNER TO postgres;
 -- ddl-end --
 
-INSERT INTO rest.flows (id, flow_name, description, min_access_lvl) VALUES (DEFAULT, E'StartPage', E'Стартовая страница', E'4');
+INSERT INTO rest.flows (id, flow_name, description, min_access_lvl) VALUES (DEFAULT, E'StartPage', E'Стартовая страница', E'0');
 -- ddl-end --
-INSERT INTO rest.flows (id, flow_name, description, min_access_lvl) VALUES (DEFAULT, E'SimpleExcelInt', E'Помощьв в калькуляциях', E'4');
+INSERT INTO rest.flows (id, flow_name, description, min_access_lvl) VALUES (DEFAULT, E'SimpleExcelInt', E'Помощьв в калькуляциях', E'0');
 -- ddl-end --
-INSERT INTO rest.flows (id, flow_name, description, min_access_lvl) VALUES (DEFAULT, E'SimpleSpecParser', E'Работа с проектом для создания маршруток и др', E'4');
+INSERT INTO rest.flows (id, flow_name, description, min_access_lvl) VALUES (DEFAULT, E'SimpleSpecParser', E'Работа с проектом для создания маршруток и др', E'0');
 -- ddl-end --
-INSERT INTO rest.flows (id, flow_name, description, min_access_lvl) VALUES (DEFAULT, E'NewPerson', E'Профиль, регистрация и тд', E'4');
+INSERT INTO rest.flows (id, flow_name, description, min_access_lvl) VALUES (DEFAULT, E'NewPerson', E'Профиль, регистрация и тд', E'0');
 -- ddl-end --
-INSERT INTO rest.flows (id, flow_name, description, min_access_lvl) VALUES (DEFAULT, E'Authorization', E'Авторизация', E'4');
+INSERT INTO rest.flows (id, flow_name, description, min_access_lvl) VALUES (DEFAULT, E'Authorization', E'Авторизация', E'0');
+-- ddl-end --
+INSERT INTO rest.flows (id, flow_name, description, min_access_lvl) VALUES (DEFAULT, E'SetAccesses', E'Изменение уровней доступа', E'30');
 -- ddl-end --
 
 -- object: access.accesses | type: TABLE --
 -- DROP TABLE IF EXISTS access.accesses CASCADE;
 CREATE TABLE access.accesses(
 	id serial NOT NULL,
-	way_id int4,
+	flow_id int4,
 	user_id int4 NOT NULL,
 	access_lvl_id int4 NOT NULL,
 	CONSTRAINT accesses_pk PRIMARY KEY (id)
@@ -110,20 +112,22 @@ CREATE TABLE access.accesses_lvls(
 	id serial NOT NULL,
 	lvl_code text NOT NULL,
 	description text,
-	CONSTRAINT accesses_lvls_pk PRIMARY KEY (id)
+	access_lvl smallint NOT NULL,
+	CONSTRAINT accesses_lvls_pk PRIMARY KEY (id),
+	CONSTRAINT access_lvl_uq UNIQUE (access_lvl)
 
 );
 -- ddl-end --
 ALTER TABLE access.accesses_lvls OWNER TO postgres;
 -- ddl-end --
 
-INSERT INTO access.accesses_lvls (id, lvl_code, description) VALUES (DEFAULT, E'admin', E'admin');
+INSERT INTO access.accesses_lvls (id, lvl_code, description, access_lvl) VALUES (DEFAULT, E'guest', E'уровень доступа как у гостя без регистрации', E'0');
 -- ddl-end --
-INSERT INTO access.accesses_lvls (id, lvl_code, description) VALUES (DEFAULT, E'boss', E'начальник');
+INSERT INTO access.accesses_lvls (id, lvl_code, description, access_lvl) VALUES (DEFAULT, E'regular', E'обычный уровень доступа ( допущен )', E'10');
 -- ddl-end --
-INSERT INTO access.accesses_lvls (id, lvl_code, description) VALUES (DEFAULT, E'regular', E'обычный уровень доступа ( допущен )');
+INSERT INTO access.accesses_lvls (id, lvl_code, description, access_lvl) VALUES (DEFAULT, E'boss', E'начальник', E'20');
 -- ddl-end --
-INSERT INTO access.accesses_lvls (id, lvl_code, description) VALUES (DEFAULT, E'guest', E'уровень доступа как у гостя без регистрации');
+INSERT INTO access.accesses_lvls (id, lvl_code, description, access_lvl) VALUES (DEFAULT, E'admin', E'admin', E'30');
 -- ddl-end --
 
 -- object: users.passwords | type: TABLE --
@@ -141,7 +145,7 @@ CREATE TABLE users.passwords(
 ALTER TABLE users.passwords OWNER TO postgres;
 -- ddl-end --
 
-INSERT INTO users.passwords (id, user_id, login, pass) VALUES (DEFAULT, E'1', E'root', E'cef9be2622851fe89ad9a686e3e38b8b9c6fc1a371a1a84cb09c52de7669c8b6');
+INSERT INTO users.passwords (id, user_id, login, pass) VALUES (DEFAULT, E'1', E'root', E'bf01fc0344b08285c749e34db1ac51526ce944b2b7c032e109040cbdeeba458f');
 -- ddl-end --
 
 -- object: users.new_user_request | type: TABLE --
@@ -206,16 +210,16 @@ INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'201', E'Н�
 INSERT INTO dictionary.errors (id, code, message) VALUES (DEFAULT, E'301', E'Ваш connection token устарел');
 -- ddl-end --
 
--- object: flows_fk | type: CONSTRAINT --
--- ALTER TABLE rest.flows DROP CONSTRAINT IF EXISTS flows_fk CASCADE;
-ALTER TABLE rest.flows ADD CONSTRAINT flows_fk FOREIGN KEY (min_access_lvl)
-REFERENCES access.accesses_lvls (id) MATCH FULL
+-- object: flows_minfk | type: CONSTRAINT --
+-- ALTER TABLE rest.flows DROP CONSTRAINT IF EXISTS flows_minfk CASCADE;
+ALTER TABLE rest.flows ADD CONSTRAINT flows_minfk FOREIGN KEY (min_access_lvl)
+REFERENCES access.accesses_lvls (access_lvl) MATCH FULL
 ON DELETE NO ACTION ON UPDATE NO ACTION;
 -- ddl-end --
 
 -- object: accesses_fk_ways | type: CONSTRAINT --
 -- ALTER TABLE access.accesses DROP CONSTRAINT IF EXISTS accesses_fk_ways CASCADE;
-ALTER TABLE access.accesses ADD CONSTRAINT accesses_fk_ways FOREIGN KEY (way_id)
+ALTER TABLE access.accesses ADD CONSTRAINT accesses_fk_ways FOREIGN KEY (flow_id)
 REFERENCES rest.flows (id) MATCH FULL
 ON DELETE NO ACTION ON UPDATE NO ACTION;
 -- ddl-end --

@@ -17,7 +17,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="flows">
 	<schema name="rest"/>
 	<role name="postgres"/>
-	<position x="153.857" y="953"/>
+	<position x="152.524" y="980.333"/>
 	<column name="id" not-null="true">
 		<type name="serial" length="0"/>
 	</column>
@@ -39,11 +39,12 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 	<initial-data>
 <![CDATA[id•flow_name•description•min_access_lvl⸣
-•StartPage•Стартовая страница•4⸣
-•SimpleExcelInt•Помощьв в калькуляциях•4⸣
-•SimpleSpecParser•Работа с проектом для создания маршруток и др•4⸣
-•NewPerson•Профиль, регистрация и тд•4⸣
-•Authorization•Авторизация•4]]>
+•StartPage•Стартовая страница•0⸣
+•SimpleExcelInt•Помощьв в калькуляциях•0⸣
+•SimpleSpecParser•Работа с проектом для создания маршруток и др•0⸣
+•NewPerson•Профиль, регистрация и тд•0⸣
+•Authorization•Авторизация•0⸣
+•SetAccesses•Изменение уровней доступа•30]]>
 	</initial-data>
 </table>
 
@@ -58,7 +59,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id" not-null="true">
 		<type name="serial" length="0"/>
 	</column>
-	<column name="way_id">
+	<column name="flow_id">
 		<type name="int4" length="0"/>
 	</column>
 	<column name="user_id" not-null="true">
@@ -79,7 +80,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="users">
 	<schema name="users"/>
 	<role name="postgres"/>
-	<position x="403.714" y="727.571"/>
+	<position x="429.047" y="728.238"/>
 	<column name="id" not-null="true">
 		<type name="serial" length="0"/>
 	</column>
@@ -110,7 +111,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="accesses_lvls">
 	<schema name="access"/>
 	<role name="postgres"/>
-	<position x="201.714" y="837.857"/>
+	<position x="173.143" y="837.857"/>
 	<column name="id" not-null="true">
 		<type name="serial" length="0"/>
 	</column>
@@ -120,22 +121,28 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="description">
 		<type name="text" length="0"/>
 	</column>
+	<column name="access_lvl" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
 	<constraint name="accesses_lvls_pk" type="pk-constr" table="access.accesses_lvls">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
+	<constraint name="access_lvl_uq" type="uq-constr" table="access.accesses_lvls">
+		<columns names="access_lvl" ref-type="src-columns"/>
+	</constraint>
 	<initial-data>
-<![CDATA[id•lvl_code•description⸣
-•admin•admin⸣
-•boss•начальник⸣
-•regular•обычный уровень доступа ( допущен )⸣
-•guest•уровень доступа как у гостя без регистрации]]>
+<![CDATA[id•lvl_code•description•access_lvl⸣
+•guest•уровень доступа как у гостя без регистрации•0⸣
+•regular•обычный уровень доступа ( допущен )•10⸣
+•boss•начальник•20⸣
+•admin•admin•30]]>
 	</initial-data>
 </table>
 
 <table name="passwords">
 	<schema name="users"/>
 	<role name="postgres"/>
-	<position x="605.429" y="729"/>
+	<position x="630.762" y="729.667"/>
 	<column name="id" not-null="true">
 		<type name="serial" length="0"/>
 	</column>
@@ -156,14 +163,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 	<initial-data>
 <![CDATA[id•user_id•login•pass⸣
-•1•root•cef9be2622851fe89ad9a686e3e38b8b9c6fc1a371a1a84cb09c52de7669c8b6]]>
+•1•root•bf01fc0344b08285c749e34db1ac51526ce944b2b7c032e109040cbdeeba458f]]>
 	</initial-data>
 </table>
 
 <table name="new_user_request">
 	<schema name="users"/>
 	<role name="postgres"/>
-	<position x="611.429" y="853"/>
+	<position x="636.762" y="853.667"/>
 	<column name="id" not-null="true">
 		<type name="serial" length="0"/>
 	</column>
@@ -200,7 +207,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="connections">
 	<schema name="users"/>
 	<role name="postgres"/>
-	<position x="403.619" y="607.429"/>
+	<position x="428.952" y="608.096"/>
 	<column name="id" not-null="true">
 		<type name="serial" length="0"/>
 	</column>
@@ -252,15 +259,15 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</initial-data>
 </table>
 
-<constraint name="flows_fk" type="fk-constr" comparison-type="MATCH FULL"
+<constraint name="flows_minfk" type="fk-constr" comparison-type="MATCH FULL"
 	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="access.accesses_lvls" table="rest.flows">
 	<columns names="min_access_lvl" ref-type="src-columns"/>
-	<columns names="id" ref-type="dst-columns"/>
+	<columns names="access_lvl" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="accesses_fk_ways" type="fk-constr" comparison-type="MATCH FULL"
 	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="rest.flows" table="access.accesses">
-	<columns names="way_id" ref-type="src-columns"/>
+	<columns names="flow_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 

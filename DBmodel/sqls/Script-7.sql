@@ -13,7 +13,7 @@ update users.new_user_request
 set status = 1
 where id = 1;
 
-select * from logInUser('root', CAST('cef9be2622851fe89ad9a686e3e38b8b9c6fc1a371a1a84cb09c52de7669c8b6' as text));
+select * from logInUser('root', CAST('bf01fc0344b08285c749e34db1ac51526ce944b2b7c032e109040cbdeeba458f' as text));
 select * from logInUser(cast ('403274c20d9b6974fe6548494f6fc1f7' as text));
 select * from users.connections;
 

@@ -14,6 +14,7 @@ if($sessionWork->hasSubFlowTask()) {
 
     $Answer['flow'] = $flowForFront;
     $Answer['initData'] = $form;
+    $Answer['sess'] = $_SESSION;
 
     echo json_encode($Answer, JSON_UNESCAPED_UNICODE );
 } else {

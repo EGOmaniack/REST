@@ -20,9 +20,12 @@ if($sessionWork->hasSubFlowTask() && $havMoreSteps) {
 
     $Answer['flow'] = $flowForFront;
     $Answer['initData'] = $form;
+    $Answer['sess2'] = $_SESSION;
 
     echo json_encode($Answer, JSON_UNESCAPED_UNICODE );
 } else {
-    $sessionWork->rollBack();
+    // шаги закончились
+    // task выполнен. ставим done
+    $sessionWork->setTaskDone();
 }
 

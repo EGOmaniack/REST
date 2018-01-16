@@ -42,18 +42,22 @@ class SessionWork {
     /**
      * @param Flow $flow
      */
-    public function upDateWorkflowState(Flow $flow) {
+    public function upDateWorkflowState(Flow $flow)
+    {
         $workflowsCount = count($this->currentWorkflow);
-        if($this->currentWorkflow[$workflowsCount-1]->getFlowName() == $flow->getFlowName()) {
+        if($this->currentWorkflow[$workflowsCount-1]->getFlowName() == $flow->getFlowName())
+        {
             $this->currentWorkflow[$workflowsCount-1]->getStateName($flow->getStateName());
         } else {
             $this->resetWorkflowState();
         }
     }
 
-    public function popWorkflowState() {
+    public function popWorkflowState()
+    {
         $workflowsCount = count($this->currentWorkflow);
-        if($workflowsCount > 1) {
+        if($workflowsCount > 1)
+        {
             unset($this->currentWorkflow[$workflowsCount-1]);
             $_SESSION['workflow'] = serialize($this->currentWorkflow);
         } else {
@@ -61,39 +65,40 @@ class SessionWork {
         }
     }
 
-    public function getCurrentWorkflow(): Flow {
+    public function getCurrentWorkflow(): Flow
+    {
         $workflowsCount = count($this->currentWorkflow);
         return $this->currentWorkflow[$workflowsCount-1];
     }
 
-    private function resetWorkflowState() {
+    private function resetWorkflowState()
+    {
         $this->currentWorkflow = array(new Flow("StartPage", "Cards"));
         $_SESSION['workflow'] = serialize($this->currentWorkflow);
     }
 
-    public function rollBack() {
-        if($this->subFlowTask['done']) {
-            // убрали предыдущий flow из стека
-            $this->popWorkflowState();
-        } else {
-            $this->subFlowTask['done'] = true;
-        }
+    public function rollBack()
+    {
+        // убрали предыдущий flow из стека
+        $this->popWorkflowState();
         // запускаем предыдущий стэйт
         $newFlowName = $this->getCurrentWorkflow();
-        include '../../v1/changeFlow/index.php';
+        include_once '../../v1/changeFlow/index.php';
         changeFlow($newFlowName->getFlowName());
     }
 
-    public function newSubFlowTask(SubFlowTask $subFlTask) {
+    public function newSubFlowTask(SubFlowTask $subFlTask)
+    {
         $this->subFlowTask['task'] = $subFlTask;
         $this->subFlowTask['done'] = false;
 
         $_SESSION['subflowtask'] = serialize($this->subFlowTask);
     }
 
-    public function startSubFlow(Flow $subFlow, Flow $initializer) {
+    public function startSubFlow(Flow $subFlow, Flow $target)
+    {
         $this->subflow['flow'] = $subFlow;
-        $this->subflow['initializer'] = $initializer;
+        $this->subflow['target'] = $target;
         $_SESSION['subflow'] = serialize($this->subflow);
         include_once '../../v1/changeFlow/index.php';
         changeFlow($this->subflow['flow']->getFlowName());
@@ -102,10 +107,12 @@ class SessionWork {
     /**
      * @return bool
      */
-    public function hasSubFlowTask(): bool {
+    public function hasSubFlowTask(): bool
+    {
         $hasSubTask = false;
 
-        if(isset($this->subFlowTask) && !$this->subFlowTask['done']) {
+        if (isset($this->subFlowTask) && !$this->subFlowTask['done'])
+        {
             $hasSubTask = true;
         }
 
@@ -133,13 +140,47 @@ class SessionWork {
     /**
      * @return string
      */
-    public function getSubflowInitializerName(): string
+    public function getSubFlowTargetName(): string
     {
         string: $result = '';
         if(isset($this->subflow)) {
-            $result = $this->subflow['initializer']->getFlowName();
+            $result = $this->subflow['target']->getFlowName();
         }
         return $result;
+    }
+
+    public function isSubFlowTaskDone(): bool {
+        bool: $result = false;
+        if(isset($this->subFlowTask['done'])) {
+            $result = $this->subFlowTask['done'];
+        }
+        return $result;
+    }
+
+    public function setTaskDone()
+    {
+        if (isset($this->subFlowTask))
+        {
+            $this->subFlowTask['done'] = true;
+            $_SESSION['subflowtask'] = serialize($this->subFlowTask);
+//            var_dump($this->subFlowTask);exit;
+            include_once '../../v1/changeFlow/index.php';
+            changeFlow($this->subflow['target']->getFlowName());
+        }
+    }
+
+    public function setUserRegSended()
+    {
+        $this->user->setRegSended();
+        $_SESSION['user'] = serialize($this->user);
+    }
+
+    public function freeSubflow()
+    {
+        unset($this->subflow);
+        unset($this->subFlowTask);
+        unset($_SESSION['subflowtask']);
+        unset($_SESSION['subflow']);
     }
 
 }

@@ -54,4 +54,9 @@ class SubflowTask {
 
     }
 
+    public function getForm()
+    {
+        return $this->toEditForm;
+    }
+
 }
