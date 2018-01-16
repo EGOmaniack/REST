@@ -21,13 +21,19 @@ $sqlstr = "select * from LoginUser( '"
     . $info['userlogin'] . "', '"
     . hash('sha256', $info['loginpass']) . "');";
 
-$answer = sqlFunction($sqlstr, 'loginuser');
+$answer = sqlFunction($sqlstr);
 //var_dump($answer);exit;
 if($answer['status'] == 'OK') {
+
+    $newUser = new User();
+    $newUser->setAutorized(true);
+    $newUser->setToken($answer['answer']['newusertoken']);
+    $newUser->setUserId($answer['answer']['newuser_id']);
+    $newUser->getinfo();
+    $sessionWork->updateUser('fullUpdate', $newUser);
+
     $sessionWork->setUserRegSended();
     $sessionWork->freeSubflow();
-    $token['token'] = $answer['answer']['newusertoken'];
-    $sessionWork->setDopInfo($token);
     $sessionWork->rollBack();
 } else if($answer['status'] == 'ERROR'){
     if($answer['answer']['code'] == 202) {

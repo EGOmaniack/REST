@@ -26,7 +26,12 @@ class SessionWork {
     public function getAccessLvl() {
         return 'guest';
     }
-
+    public function updateUser(string $comandName, $params) {
+        if($comandName == 'fullUpdate') {
+            $this->user = $params;
+            $_SESSION['user'] = serialize($this->user);
+        }
+    }
     public function pushWorkflowState(Flow $newFlow) {
 
         $workflowsCount = count($this->currentWorkflow);
