@@ -2,14 +2,14 @@
 
 class User {
 
-    private $autorized;
+    public $autorized;
     private $regSended;
     private $token;
     private $userId;
-    private $name;
-    private $sName;
-    private $patronymic;
-    private $nickName;
+    public $name;
+    public $sName;
+    public $patronymic;
+    public $nickName;
 
     public function __construct () {
         $this->autorized = false;

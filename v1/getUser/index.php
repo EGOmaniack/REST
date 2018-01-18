@@ -8,5 +8,9 @@
 
 header("Access-Control-Allow-Origin: ".$_SERVER['HTTP_ORIGIN']);
 header('Access-Control-Allow-Credentials: true');
+include '../../classes/index.php';
 
-echo 111;
+//var_dump($_POST);
+$sessionWork = new SessionWork();
+$Answer['user'] = $sessionWork->getUser();
+echo json_encode($Answer, JSON_UNESCAPED_UNICODE);

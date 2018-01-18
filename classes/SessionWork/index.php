@@ -88,7 +88,7 @@ class SessionWork {
         $this->popWorkflowState();
         // запускаем предыдущий стэйт
         $newFlowName = $this->getCurrentWorkflow();
-        include_once '../../v1/changeFlow/index.php';
+        include_once MY_CLASSES_ROOT . '../v1/changeFlow/index.php';
         changeFlow($newFlowName->getFlowName());
     }
 
@@ -105,7 +105,7 @@ class SessionWork {
         $this->subflow['flow'] = $subFlow;
         $this->subflow['target'] = $target;
         $_SESSION['subflow'] = serialize($this->subflow);
-        include_once '../../v1/changeFlow/index.php';
+        include_once MY_CLASSES_ROOT . '../v1/changeFlow/index.php';
         changeFlow($this->subflow['flow']->getFlowName());
     }
 
@@ -169,7 +169,7 @@ class SessionWork {
             $this->subFlowTask['done'] = true;
             $_SESSION['subflowtask'] = serialize($this->subFlowTask);
 //            var_dump($this->subFlowTask);exit;
-            include_once '../../v1/changeFlow/index.php';
+            include_once MY_CLASSES_ROOT . '../v1/changeFlow/index.php';
             changeFlow($this->subflow['target']->getFlowName());
         }
     }
@@ -193,6 +193,14 @@ class SessionWork {
         $added = $this->getSubFlowTask()->addStep();
         $_SESSION['subflowtask'] = serialize($this->subFlowTask);
         return $added;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user;
     }
 
 }

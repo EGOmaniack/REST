@@ -96,6 +96,7 @@ function sqlFunction(string $query) {
             $mess; //".*"
             preg_match_all('/{"code":\s[0-9]{1,1000},\s*"message":\s*(".*")\s*}/', $e->getMessage(), $mess);
 //            header("HTTP/1.0 400 Not Acceptable");
+//            var_dump($mess); exit;
             return json_decode('{"status": "ERROR", "answer": ' . $mess[0][0] . '}', true);
         }
     } while ($repeat);
